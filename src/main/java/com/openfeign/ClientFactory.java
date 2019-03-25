@@ -118,13 +118,13 @@ public class ClientFactory {
                 })
                 .logLevel(Logger.Level.FULL)
                 .target(tClass, baseUrl);
-        client= (T) createProxyClent(client);
+        client= (T) createProxyClient(client);
         clientMap.put(key, client);
 
         return client;
     }
 
-    private <T extends ApiClient> ApiClient createProxyClent(T client) {
+    private <T extends ApiClient> ApiClient createProxyClient(T client) {
         return (ApiClient) Proxy.newProxyInstance(getClass().getClassLoader(), client.getClass().getInterfaces(),
                 new InvocationHandler() {
 
