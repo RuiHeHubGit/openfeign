@@ -163,11 +163,16 @@ public class ClientFactory {
                 .encoder(encoder)
                 .decoder(decoder)
                 .target(tClass, baseUrl);
+<<<<<<< HEAD
+=======
+        client= (T) createProxyClient(client);
+>>>>>>> c92039b79076984582e96d289e89f2895df38e65
         clientMap.put(key, client);
 
         return client;
     }
 
+<<<<<<< HEAD
     private ErrorDecoder createErrorDecode() {
         return new ErrorDecoder() {
             @Override
@@ -223,6 +228,10 @@ public class ClientFactory {
 
     private Object createProxyClient(Object client) {
         return Proxy.newProxyInstance(getClass().getClassLoader(), client.getClass().getInterfaces(),
+=======
+    private <T extends ApiClient> ApiClient createProxyClient(T client) {
+        return (ApiClient) Proxy.newProxyInstance(getClass().getClassLoader(), client.getClass().getInterfaces(),
+>>>>>>> c92039b79076984582e96d289e89f2895df38e65
                 new InvocationHandler() {
 
                     @Override
