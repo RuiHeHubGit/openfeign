@@ -1,4 +1,4 @@
-package com.openfeign.client.entities;
+package com.openfeign.testserver;
 
 public class ErrorType {
     private String errorCode;

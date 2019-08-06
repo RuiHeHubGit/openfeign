@@ -26,9 +26,7 @@ public class DemoApplication {
 											@RequestBody Record record) {
 		record.setId(index.getAndIncrement());
 		repository.put(record.getId(), record);
-		Map result = new HashMap();
-		result.put("record", record);
-		return result;
+		return record;
 	}
 
 	@PutMapping("/uid/{uid}/record/{cid}")
@@ -40,14 +38,15 @@ public class DemoApplication {
 		Record record = repository.get(cid);
 		if(record == null) {
 			response.setStatus(400);
-			result.put("errorCode", "11404");
-			result.put("describe", "Invalid record id");
+			ErrorType errorType = new ErrorType();
+			errorType.setErrorCode("11404");
+			errorType.setDescribe("Invalid record id");
+			return errorType;
 		} else {
 			record.setContent(content);
 			repository.put(record.getId(), record);
-			result.put("record", record);
+			return record;
 		}
-		return result;
 	}
 
 	@GetMapping("/uid/{uid}/record/{cid}")
@@ -58,8 +57,10 @@ public class DemoApplication {
 		Record record = repository.get(cid);
 		if(record == null) {
 			response.setStatus(400);
-			result.put("errorCode", "10404");
-			result.put("describe", "Invalid record id");
+			ErrorType errorType = new ErrorType();
+			errorType.setErrorCode("11404");
+			errorType.setDescribe("Invalid record id");
+			return errorType;
 		} else {
 			result.put("record", record);
 		}
@@ -88,8 +89,10 @@ public class DemoApplication {
 		Record record = repository.get(cid);
 		if(record == null) {
 			response.setStatus(400);
-			result.put("errorCode", "10404");
-			result.put("describe", "Invalid record id");
+			ErrorType errorType = new ErrorType();
+			errorType.setErrorCode("11404");
+			errorType.setDescribe("Invalid record id");
+			return errorType;
 		} else {
 			repository.remove(cid);
 		}

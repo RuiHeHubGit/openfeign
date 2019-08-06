@@ -1,10 +1,9 @@
 package com.openfeign;
 
 import com.openfeign.client.RecordApiClient;
-import com.openfeign.client.entities.ErrorType;
-import com.openfeign.client.entities.QueryRecordListResponse;
+import com.openfeign.testserver.ErrorType;
 import com.openfeign.client.entities.Record;
-import com.openfeign.client.entities.RecordResponse;
+import com.openfeign.client.entities.RecordList;
 import com.openfeign.testserver.DemoApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,36 +17,35 @@ public class DemoApplicationTests {
 	@Test
 	public void test() {
 		ClientFactory factory = ClientFactory.Builder()
-				.errorType(ErrorType.class)
 				.defaultBaseUrl("http://localhost:8080").build();
 		RecordApiClient client = factory.createJsonClient(RecordApiClient.class, null);
 
 		Record record = new Record();
 		record.setUserId(1L);
 		record.setContent("record1");
-		RecordResponse response = client.postRecord(1L, record);
-		System.out.println(response.getRecord());
-		record.setId(response.getRecord().getId());
+		BaseResponse<Record, ErrorType> response = client.postRecord(1L, record);
+		System.out.println(response.getData());
+		record.setId(response.getData().getId());
 
-		response = client.putRecord(1L, response.getRecord().getId(), "update1");
-		System.out.println(response.getRecord());
+		response = client.putRecord(1L, response.getData().getId(), "update1");
+		System.out.println(response.getData());
 
-		response = client.getRecord(1L, response.getRecord().getId());
-		System.out.println(response.getRecord());
+		response = client.getRecord(1L, response.getData().getId());
+		System.out.println(response.getData());
 
 		record.setUserId(1L);
 		record.setContent("record2");
 		response = client.postRecord(1L, record);
-		System.out.println(response.getRecord());
+		System.out.println(response.getData());
 
-		QueryRecordListResponse queryRecordListResponse = client.getRecordsOfUser(1L);
-		System.out.println(queryRecordListResponse.getRecordList());
+		BaseResponse<RecordList, ErrorType> queryRecordListResponse = client.getRecordsOfUser(1L);
+		System.out.println(queryRecordListResponse.getData());
 
 		response = client.deleteRecord(1L, record.getId());
-		System.out.println(response.getHttpStatus());
+		System.out.println(response.getStatus());
 
 		response = client.getRecord(1L, record.getId());
-		System.out.println(response.getHttpStatus());
+		System.out.println(response.getStatus());
 		System.out.println("error:"+response.getError().getErrorCode()+","+response.getError().getDescribe());
 	}
 
